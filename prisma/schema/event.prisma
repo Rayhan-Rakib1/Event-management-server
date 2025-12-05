@@ -1,0 +1,27 @@
+model Event {
+    id              String      @id @default(cuid())
+    name            String
+    type            String // "Concert", "Hike", "Dinner", "Meetup"
+    description     String      @db.Text
+    date            DateTime
+    time            String
+    location        String
+    image           String?
+    joiningFee      Float       @default(0)
+    minParticipants Int         @default(2)
+    maxParticipants Int
+    status          EventStatus @default(OPEN)
+
+    hostId String
+    host   User   @relation("HostedEvents", fields: [hostId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    participants Participant[]
+    reviews      Review[]
+    payments     Payment[]
+
+    @@map("events")
+}
