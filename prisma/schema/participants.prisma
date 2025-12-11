@@ -1,13 +1,17 @@
 model Participant {
-    id       String            @id @default(cuid())
-    userId   String
-    eventId  String
-    status   ParticipantStatus @default(JOINED)
-    joinedAt DateTime          @default(now())
+  id            String            @id @default(cuid())
+  userId        String
+  eventId       String
+  status        ParticipantStatus @default(JOINED)
+  paymentStatus PaymentStatus     @default(UNPAID)
+  paidAmount    Float?
+  paymentDate   DateTime?
+  joinedAt      DateTime          @default(now())
 
-    user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
-    @@unique([userId, eventId])
-    @@map("participants")
+  @@unique([userId, eventId])
+  @@map("participants")
 }
+

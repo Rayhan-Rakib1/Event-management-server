@@ -1,6 +1,6 @@
 model Review {
     id      String  @id @default(cuid())
-    rating  Int // 1-5 stars
+    rating  Int
     comment String? @db.Text
 
     userId  String // যে রিভিউ দিচ্ছে
@@ -8,11 +8,11 @@ model Review {
     eventId String // কোন ইভেন্টের জন্য
 
     user  User  @relation("ReviewsByUser", fields: [userId], references: [id], onDelete: Cascade)
-    host  User  @relation("ReviewsForHost", fields: [hostId], references: [id], onDelete: Cascade)
     event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    host      Host     @relation("ReviewsForHost", fields: [hostId], references: [id])
 
     @@unique([userId, eventId]) // একই ইভেন্টে একজন ইউজার একবার রিভিউ দিতে পারবে
     @@map("reviews")

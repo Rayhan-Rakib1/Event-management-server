@@ -1,30 +1,53 @@
 model User {
-    id           String   @id @default(cuid())
-    email        String   @unique
+    id           String     @id @default(cuid())
+    email        String     @unique
     password     String
-    fullName     String
-    role         Role     @default(USER)
+    name         String
+    role         Role       @default(USER)
+    gender       Gender     @default(MALE)
     profileImage String?
     bio          String?
     location     String?
-    interests    String[] // ["Music", "Sports", "Gaming"]
-
-    // Ratings as Host
-    averageRating Float? @default(0)
-    totalRatings  Int    @default(0)
+    interests    String[]
+    status       UserStatus @default(ACTIVE)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    // Relations
-    hostedEvents    Event[]       @relation("HostedEvents")
-    joinedEvents    Participant[]
-    reviews         Review[]      @relation("ReviewsByUser")
-    receivedReviews Review[]      @relation("ReviewsForHost")
-    payments        Payment[]
-    admin           Admin?
+    reviews      Review[]      @relation("ReviewsByUser")
+    admin        Admin?
+    payments     Payment[]
+    host         Host?         @relation("UserHost")
+    participants Participant[]
 
     @@map("users")
+}
+
+model Host {
+    id            String   @id @default(cuid())
+    name          String
+    email         String   @unique
+    profileImage  String?
+    bio           String?
+    role          Role     @default(HOST)
+    location      String?
+    gender        Gender   @default(MALE)
+    interests     String[]
+    averageRating Float?   @default(0)
+    totalRatings  Int      @default(0)
+
+    user User @relation("UserHost", fields: [email], references: [email])
+
+    totalEventsHosted Int   @default(0)
+    totalRevenue      Float @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    hostedEvents    Event[]  @relation("HostedEvents")
+    receivedReviews Review[] @relation("ReviewsForHost")
+
+    @@map("host")
 }
 
 model Admin {

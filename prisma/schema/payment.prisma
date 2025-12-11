@@ -2,15 +2,15 @@ model Payment {
     id            String        @id @default(cuid())
     amount        Float
     currency      String        @default("BDT")
-    status        PaymentStatus @default(PENDING)
+    status        PaymentStatus @default(UNPAID)
     transactionId String?       @unique
     paymentMethod String? // "Stripe", "SSLCommerz", "AmarPay"
 
-    userId  String
-    eventId String
-
-    user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    userId             String
+    eventId            String
+    paymentGatewayData Json?
+    user               User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    event              Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
