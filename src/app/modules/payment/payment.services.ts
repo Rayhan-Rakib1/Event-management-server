@@ -10,14 +10,14 @@ const handleStripeWebhookEvent = async (event: Stripe.Event) => {
             const appointmentId = session.metadata?.appointmentId;
             const paymentId = session.metadata?.paymentId;
 
-            await prisma.appointment.update({
-                where: {
-                    id: appointmentId
-                },
-                data: {
-                    paymentStatus: session.payment_status === "paid" ? PaymentStatus.PAID : PaymentStatus.UNPAID
-                }
-            })
+            // await prisma.appointment.update({
+            //     where: {
+            //         id: appointmentId
+            //     },
+            //     data: {
+            //         paymentStatus: session.payment_status === "paid" ? PaymentStatus.PAID : PaymentStatus.UNPAID
+            //     }
+            // })
 
             await prisma.payment.update({
                 where: {

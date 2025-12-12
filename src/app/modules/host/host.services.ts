@@ -1,6 +1,6 @@
 // host.service.ts
 
-import { Host, Prisma } from "@prisma/client";
+import { Host, PaymentStatus, Prisma } from "@prisma/client";
 import httpStatus from "http-status";
 import { prisma } from "../../../shared/prisma";
 import { IHostStats, IHostUpdate } from "./host.interface";
@@ -426,7 +426,7 @@ const getHostDashboard = async (hostId: string) => {
     prisma.payment.aggregate({
       where: {
         event: { hostId },
-        status: "COMPLETED",
+        status: PaymentStatus.PAID,
         createdAt: {
           gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         },
@@ -444,7 +444,7 @@ const getHostDashboard = async (hostId: string) => {
       averageRating: host.averageRating,
       totalRatings: host.totalRatings,
       totalParticipants,
-      monthlyRevenue: monthlyRevenue._sum.amount || 0,
+      monthlyRevenue: monthlyRevenue?._sum.amount || 0,
     },
     upcomingEvents,
     pastEvents,
