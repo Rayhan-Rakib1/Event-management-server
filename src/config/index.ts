@@ -24,4 +24,9 @@ export default {
     stripe_webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
     stripe_secret_key: process.env.STRIPE_SECRET_KEY,
   },
+  cloudinary: {
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+  },
 };
